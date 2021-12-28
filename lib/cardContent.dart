@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'constants.dart';
 
 class cardContent extends StatelessWidget {
   final String gender_name;
@@ -20,10 +21,7 @@ class cardContent extends StatelessWidget {
         ),
         Text(
           gender_name,
-          style: TextStyle(
-            fontSize: 18.0,
-            color: Color(0xFF8D8E98),
-          ),
+          style: labelTextSyle,
         )
       ],
     );

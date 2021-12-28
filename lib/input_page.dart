@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:bimi_calc/resuable_card.dart';
 import 'package:bimi_calc/cardContent.dart';
+import 'constants.dart';
 
-const bottmContainerHeight = 80.0;
-const activeCardclr = Color(0xFF1D1E33);
-const bottomContainerclr = Color(0xFFEB1555);
-String female = 'FEMALE';
-String male = 'MALE';
+enum GenderType { MALE, FEMALE }
+
+int height = 180;
 
 class InputPage extends StatefulWidget {
   const InputPage({Key? key}) : super(key: key);
@@ -17,6 +16,8 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
+  GenderType? selectedgender;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,13 +25,21 @@ class _InputPageState extends State<InputPage> {
           title: const Center(child: Text('BMI CALCULATOR')),
         ),
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
               child: Row(
                 children: [
                   Expanded(
                       child: reusableCard(
-                    colour: activeCardclr,
+                    onPress: () {
+                      setState(() {
+                        selectedgender = GenderType.MALE;
+                      });
+                    },
+                    colour: selectedgender == GenderType.MALE
+                        ? activeCardclr
+                        : inactiveCardclr,
                     cardChild: cardContent(
                       gender_name: 'MALE',
                       icon: FontAwesomeIcons.mars,
@@ -38,7 +47,14 @@ class _InputPageState extends State<InputPage> {
                   )),
                   Expanded(
                       child: reusableCard(
-                    colour: activeCardclr,
+                    onPress: () {
+                      setState(() {
+                        selectedgender = GenderType.FEMALE;
+                      });
+                    },
+                    colour: selectedgender == GenderType.FEMALE
+                        ? activeCardclr
+                        : inactiveCardclr,
                     cardChild: cardContent(
                       gender_name: 'FEMALE',
                       icon: FontAwesomeIcons.venus,
@@ -50,6 +66,41 @@ class _InputPageState extends State<InputPage> {
             Expanded(
                 child: reusableCard(
               colour: activeCardclr,
+              cardChild: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'HEIGHT',
+                    style: labelTextSyle,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text(
+                        height.toString(),
+                        style: kbigTextStyle,
+                      ),
+                      Text(
+                        'cm',
+                        style: labelTextSyle,
+                      ),
+                    ],
+                  ),
+                  Slider(
+                      value: height.toDouble(),
+                      min: 120.0,
+                      max: 220.0,
+                      activeColor: Color(0xFFEB1555),
+                      inactiveColor: Color(0xFF8D8E98),
+                      onChanged: (double newValue) {
+                        setState(() {
+                          height = newValue.round();
+                        });
+                      })
+                ],
+              ),
             )),
             Expanded(
               child: Row(
